@@ -34,6 +34,14 @@ class HomeTableViewController: UITableViewController {
             - uses loadTweets */
         myRefreshControl.addTarget(self, action: #selector(loadTweets), for: .valueChanged)
         tableView.refreshControl = myRefreshControl
+        tableView.rowHeight = UITableView.automaticDimension // automatically calculate row height
+        self.tableView.estimatedRowHeight = 150
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        // this is called everytime the view appears, so we can refresh
+        super.viewDidAppear(animated)
+        self.loadTweets()
     }
     
     // objc function used for refresh
@@ -109,7 +117,10 @@ class HomeTableViewController: UITableViewController {
             cell.profileImageView.image = UIImage(data: imageData)
         }
         
-        
+        // pass information about tweet for favoriting functionality
+        cell.setFavorite(tweetArray[indexPath.row]["favorited"] as! Bool)
+        cell.tweetId = tweetArray[indexPath.row]["id"] as! Int
+        cell.setRetweeted(tweetArray[indexPath.row]["retweeted"] as! Bool)
         return cell
     }
 
